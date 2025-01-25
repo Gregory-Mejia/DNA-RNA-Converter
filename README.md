@@ -1,2 +1,2 @@
 # Side-Project-DNA
-Something something bored for biology
+This is probably poorly written as this is one of the first times I'm using Python for its classes. I am more familiar with Lua/Luau (a modified version of Lua), so the code will probably not be in an industry standard format. Executable files will probably be included for the final download for Windows. Also, keep in mind that this is one of my first experiences using Python's Tkinter library for this as well, so there may be severe optimization issues.
