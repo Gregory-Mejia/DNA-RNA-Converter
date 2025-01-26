@@ -12,10 +12,10 @@
 
 class pair_struct:
     # Define creation behavior
-    def __init__(self, rules: list):
+    def __init__(self, rules: dict):
         # I wrote this before I wrote anything else so this may be redundant
         # 'rules' is like a look-up table. No case statement because I think this is faster.
-        self.rules: list = rules
+        self.rules: dict = rules
 
     # Define behavior so we can see what we need to see when we print
     def __str__(self):
@@ -65,16 +65,16 @@ class pair_struct:
 
 class DNA(pair_struct):
     def __init__(self, strand: str):
-        self.rules: list = {"A": "T", "T": "A", "G": "C", "C": "G"}
+        self.rules: dict = {"A": "T", "T": "A", "G": "C", "C": "G"}
         self.class_assignment(strand)
 
 class RNA(pair_struct):
     def __init__(self, strand: str):
-        self.rules: list = {"A": "U", "T": "A", "G": "C", "C": "G", "U": "A"}
+        self.rules: dict = {"A": "U", "T": "A", "G": "C", "C": "G", "U": "A"}
         self.class_assignment(strand)
 
     # Define the longer name versions of amino acids to match later
-    amino_acids = {
+    amino_acids: dict = {
         "Ala": "Alanine",
         "Arg": "Arginine",
         "Asp": "Aspartic acid",
@@ -97,6 +97,59 @@ class RNA(pair_struct):
         "Val": "Valine"
     }
 
+    # These cases are entirely reliant on the first two letters
+    codon_special_cases: dict = {
+        "GU": "Val",
+        "GC": "Ala",
+        "GG": "Gly",
+        "AC": "Thr",
+        "CU": "Leu",
+        "CC": "Pro",
+        "CG": "Arg",
+        "UC": "Ser"
+    }
+
+    # Now, the other ones. :sob: This could probably be done in a more efficient manor
+    codon_regular_cases: dict = {
+        "UU": {
+            "UC": "Phe",
+            "AG": "Leu"
+        },
+        "UA": {
+            "UC": "Tyr",
+            "AG": "Stop"
+        },
+        "UG": {
+            "UC": "Cys"
+        },
+        "CA": {
+            "UC": "His",
+            "AG": "Gln"
+        },
+        "AU": {
+            "UCA": "Ile"
+        },
+        "AA": {
+            "UC": "Asn",
+            "AG": "Lys"
+        },
+        "AG": {
+            "UC": "Ser",
+            "AG": "Arg"
+        },
+        "GA": {
+            "UC": "Asp",
+            "AG": "Glu"
+        }
+    }
+
+    # The codon is not able to be generalized
+    codon_exact_match: dict = {
+        "UGA": "Stop",
+        "UGG": "Trp",
+        "AUG": "Met"
+    }
+
     # Matching amino acids is a unique class function
     def match_mRNA(self, mRNA: str):
         # Resplit the string into thirds
@@ -106,6 +159,7 @@ class RNA(pair_struct):
         codon: str
         for codon in mRNA:
             # TODO: Determine which mRNA codon matches the amino acid
+            # Will have to search through 3-5 dicts :(
             pass
                 
 
