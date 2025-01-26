@@ -111,6 +111,7 @@ class RNA(pair_struct):
 
     # Now, the other ones. :sob: This could probably be done in a more efficient manor
     codon_regular_cases: dict = {
+        # First key is the first 2 letters, second key is either letter
         "UU": {
             "UC": "Phe",
             "AG": "Leu"
@@ -154,13 +155,30 @@ class RNA(pair_struct):
     def match_mRNA(self, mRNA: str):
         # Resplit the string into thirds
         mRNA: list = split_string_into_ns(mRNA, 3)
+        aaList: list = []
 
         # Done for more type checking shenanigans
         codon: str
         for codon in mRNA:
-            # TODO: Determine which mRNA codon matches the amino acid
-            # Will have to search through 3-5 dicts :(
-            pass
+            # TODO: Determine which mRNA codon matches the amino acid, start with shortest searches first
+            # Will have to search through 3-5 dicts :( and then append the result to 'aaList'
+            
+            # Easiest one down, now the others
+            if (codon in self.codon_exact_match): aaList.append(self.codon_exact_match[codon]); continue
+
+            # These two rely on the first two letters to get started
+            beginning: str = codon[0:2]
+            last: str = codon[2:3]
+            if (beginning in self.codon_special_cases): aaList.append(self.codon_special_cases[beginning]); continue
+            if (beginning in self.codon_regular_cases):
+                letters: str
+                for letters in self.codon_regular_cases[beginning]:
+                    if (not letters.find(last)): continue
+                    break
+                aaList.append(self.codon_regular_cases[beginning][letters])
+                continue
+            print(f'!! {codon} is not recognized in any dictionary !!')
+                    
                 
 
 ##  Functions  ##
