@@ -1,10 +1,14 @@
-def split_string_into_ns(string: str, n: int) -> list:
-    string = string.replace(" ", "")
-    string = string.upper()
-    return [string[index: index + n] for index in range(0, len(string), n)]
+'''
 
-def list_to_string(convert: list) -> str:
-    return str(convert).upper().replace(",", "").replace("'", "").replace("[", "").replace("]", "")
+    Written by Gregory Mejia
+    Date: 1/25/2025
+
+    Purpose: Resources
+    This is mainly for the code to be more organized. This will be called by the 'main.py' file.
+    
+'''
+
+##  Classes  ##
 
 class pair_struct:
     def __init__(self, rules: list):
@@ -14,8 +18,9 @@ class pair_struct:
         strand_str: str = self.strand.rjust(len(self.strand) + 6)
         complement_str: str = self.complement.rjust(len(self.complement) + 2)
 
-        class_str: str = str(type(self))
-        return f'\nClass: {class_str[17 : len(class_str) - 2]}\nStrand: {strand_str}\nComplement: {complement_str}\n'
+        str_current_class = str(type(self))
+        formatted_class = str_current_class[8 : len(str_current_class) - 2]
+        return f'\nClass: {formatted_class}\nStrand: {strand_str}\nComplement: {complement_str}\n'
 
     def convert(self, to_convert: str) -> str:
         to_convert = split_string_into_ns(to_convert, 3)
@@ -45,5 +50,12 @@ class RNA(pair_struct):
         self.rules = {"A": "U", "T": "A", "G": "C", "C": "G", "U": "A"}
         self.class_assignment(strand)
 
-print(DNA("attgttagccagcgaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"))
-print(RNA("aaauuutttgccgtu"))
+##  Functions  ##
+
+def split_string_into_ns(string: str, n: int) -> list:
+    string = string.replace(" ", "")
+    string = string.upper()
+    return [string[index: index + n] for index in range(0, len(string), n)]
+
+def list_to_string(convert: list) -> str:
+    return str(convert).upper().replace(",", "").replace("'", "").replace("[", "").replace("]", "")
