@@ -152,7 +152,7 @@ class RNA(pair_struct):
     }
 
     # Matching amino acids is a unique class function
-    def match_mRNA(self, mRNA: str):
+    def match_mRNA(self, mRNA: str) -> list:
         # Resplit the string into thirds
         mRNA: list = split_string_into_ns(mRNA, 3)
         aaList: list = []
@@ -173,11 +173,14 @@ class RNA(pair_struct):
             if (beginning in self.codon_regular_cases):
                 letters: str
                 for letters in self.codon_regular_cases[beginning]:
-                    if (not letters.find(last)): continue
+                    if (letters.find(last)): continue
+                    print(letters + " " + codon)
                     break
                 aaList.append(self.codon_regular_cases[beginning][letters])
                 continue
             print(f'!! {codon} is not recognized in any dictionary !!')
+
+        return aaList
                     
                 
 
