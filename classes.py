@@ -73,6 +73,42 @@ class RNA(pair_struct):
         self.rules: list = {"A": "U", "T": "A", "G": "C", "C": "G", "U": "A"}
         self.class_assignment(strand)
 
+    # Define the longer name versions of amino acids to match later
+    amino_acids = {
+        "Ala": "Alanine",
+        "Arg": "Arginine",
+        "Asp": "Aspartic acid",
+        "Asn": "Asparagine",
+        "Cys": "Cysteine",
+        "Gln": "Glutamine",
+        "Glu": "Glutamic acid",
+        "Gly": "Glycine",
+        "His": "Histidine",
+        "Ile": "Isoleucine",
+        "Leu": "Leucine",
+        "Lys": "Lycine",
+        "Met": "Methionine",
+        "Phe": "Phenylalanine",
+        "Pro": "Proline",
+        "Ser": "Serine",
+        "Thr": "Threonine",
+        "Trp": "Tryptophan",
+        "Tyr": "Tyrosine",
+        "Val": "Valine"
+    }
+
+    # Matching amino acids is a unique class function
+    def match_mRNA(self, mRNA: str):
+        # Resplit the string into thirds
+        mRNA: list = split_string_into_ns(mRNA, 3)
+
+        # Done for more type checking shenanigans
+        codon: str
+        for codon in mRNA:
+            # TODO: Determine which mRNA codon matches the amino acid
+            pass
+                
+
 ##  Functions  ##
 
 # Used to split a string every n characters
