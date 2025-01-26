@@ -14,6 +14,7 @@ class pair_struct:
     # Define creation behavior
     def __init__(self, rules: list):
         # I wrote this before I wrote anything else so this may be redundant
+        # 'rules' is like a look-up table. No case statement because I think this is faster.
         self.rules: list = rules
 
     # Define behavior so we can see what we need to see when we print
