@@ -193,6 +193,7 @@ class RNA(pair_struct):
         storage: list = []
         for acid in amino_acid_list:
             # Error detection
+            if (acid == "Stop"): storage.append("Stop"); continue
             if (not acid in self.amino_acids): storage.append("ERROR"); continue
             storage.append(self.amino_acids[acid])
         return storage
