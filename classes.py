@@ -177,7 +177,6 @@ class RNA(pair_struct):
                 letters: str
                 for letters in self.codon_regular_cases[beginning]:
                     if (letters.find(last)): continue
-                    print(letters + " " + codon)
                     break
                 aaList.append(self.codon_regular_cases[beginning][letters])
                 continue
