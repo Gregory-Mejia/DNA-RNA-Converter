@@ -68,9 +68,13 @@ class RNA(pair_struct):
     def __init__(self, template_strand: str):
         self.rules: dict = {"A": "U", "T": "A", "G": "C", "C": "G", "U": "A"}
         self.template: str = list_to_string(split_string_into_ns(template_strand, 3))
-        
+
         self.mRNA: str = self.convert(self.template)
         self.tRNA: str = self.convert(self.mRNA)
+
+        # Legacy components for the string function
+        self.strand = self.mRNA
+        self.complement = self.tRNA
 
     # Define the longer name versions of amino acids to match later
     amino_acids: dict = {

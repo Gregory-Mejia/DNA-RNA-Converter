@@ -12,9 +12,11 @@ from classes import RNA
 
 ##  Variables  ##
 
-
+template_strand = DNA("taa gca gcg gga atc")
+rna_strand = RNA(template_strand.strand)
 
 ##  Functions  ##
 
-print(DNA("aaa"))
-print(RNA("tttaaa"))
+print(template_strand)
+print(rna_strand)
+print(rna_strand.match_codons_to_amino_acids(rna_strand.mRNA))
