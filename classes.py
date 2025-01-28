@@ -54,24 +54,23 @@ class pair_struct:
                 final += self.rules[char] + (" " if (index == len(elem)) else "")
 
         return final
-
-    # This function is for the inheriting classes after they modify the '__init__' function
-    def class_assignment(self, strand):
-        self.strand: str = list_to_string(split_string_into_ns(strand, 3))
-        self.complement: str = self.convert(self.strand)
-
-# I have no idea if there's a better way to do this, but this is the best I can think of.
+    
 # DNA and RNA are defined as separate classes to make them easier to use in the main file.
 
 class DNA(pair_struct):
     def __init__(self, strand: str):
         self.rules: dict = {"A": "T", "T": "A", "G": "C", "C": "G"}
-        self.class_assignment(strand)
+        self.strand: str = list_to_string(split_string_into_ns(strand, 3))
+        self.complement: str = self.convert(self.strand)
 
+# Use the template DNA strand to get both the mRNA and tRNA
 class RNA(pair_struct):
-    def __init__(self, strand: str):
+    def __init__(self, template_strand: str):
         self.rules: dict = {"A": "U", "T": "A", "G": "C", "C": "G", "U": "A"}
-        self.class_assignment(strand)
+        self.template: str = list_to_string(split_string_into_ns(template_strand, 3))
+        
+        self.mRNA: str = self.convert(self.template)
+        self.tRNA: str = self.convert(self.mRNA)
 
     # Define the longer name versions of amino acids to match later
     amino_acids: dict = {
@@ -151,15 +150,15 @@ class RNA(pair_struct):
         "AUG": "Met"
     }
 
-    # Matching amino acids is a unique class function
-    def match_mRNA(self, mRNA: str) -> list:
+    # Match the codons to the specific RNA sequence amino acids
+    def match_codons_to_amino_acids(self, codon_string: str) -> list:
         # Resplit the string into thirds
-        mRNA: list = split_string_into_ns(mRNA, 3)
+        codon_string: list = split_string_into_ns(codon_string, 3)
         aaList: list = []
 
         # Done for more type checking shenanigans
         codon: str
-        for codon in mRNA:
+        for codon in codon_string:
             # TODO: Determine which mRNA codon matches the amino acid, start with shortest searches first
             # Will have to search through 3-5 dicts :( and then append the result to 'aaList'
             
@@ -178,11 +177,22 @@ class RNA(pair_struct):
                     break
                 aaList.append(self.codon_regular_cases[beginning][letters])
                 continue
+
+            # Error detection
             print(f'!! {codon} is not recognized in any dictionary !!')
+            aaList.append("ERROR")
 
         return aaList
-                    
-                
+    
+    def match_amino_acid_full(self, amino_acid_list: list) -> list:
+        # Use an empty storage list so we don't change our former list and potentially mess it up
+        # Also, we may want to still use the old amino_acid list so we can't change it
+        storage: list = []
+        for acid in amino_acid_list:
+            # Error detection
+            if (not acid in self.amino_acids): storage.append("ERROR"); continue
+            storage.append(self.amino_acids[acid])
+        return storage
 
 ##  Functions  ##
 
