@@ -14,7 +14,7 @@ from classes import RNA
 
 ##  Variables  ##
 
-template_strand = DNA("CCA TAT")
+template_strand = DNA("CCA TAT GTA GAA GGG CGG AGT")
 rna_strand = RNA(template_strand.strand)
 
 codon_match = rna_strand.match_codons_to_amino_acids(rna_strand.mRNA)
