@@ -3,6 +3,8 @@
     Written by Gregory Mejia
     Date: 1/25/2025
 
+    Purpose: Main project file.
+
 '''
 
 ##  Dependancies Importing  ##
@@ -10,14 +12,47 @@
 from classes import DNA
 from classes import RNA
 
-##  Variables  ##
+from tkinter import Tk
+from tkinter import Label
+from tkinter import LabelFrame
+from tkinter import Text
 
-template_strand = DNA("taa gca gcg gga atc")
-rna_strand = RNA(template_strand.strand)
+##  Classes  ##
 
-##  Functions  ##
+class WindowObject:
+    def __init__(self):
+        # Create our objects
+        self.root: Tk = Tk()
+        self.credit = Label(self.root, text="Created by Gregory Mejia")
 
-print(template_strand)
-print(rna_strand)
-print(rna_strand.match_codons_to_amino_acids(rna_strand.mRNA))
-print(rna_strand.match_amino_acid_full(rna_strand.match_codons_to_amino_acids(rna_strand.mRNA)))
+        self.title_frame = LabelFrame(self.root, padx=5, pady=-5)
+        self.title_label = Label(self.title_frame, text="Genetic Coder", font=("Helvetica", 14, "bold"), padx=15)
+
+        # Create the input side
+        self.input_frame = LabelFrame(self.root)
+        self.input_title = Label(self.input_frame, text="Input", font=("Helvetica", 10))
+
+        self.box = Text(self.input_frame)
+
+        # Modify their properties
+        self.root.title("Genetic Coder")
+        self.root.minsize(500, 300)
+        self.credit.config(font=("Helvetica", 7))
+        self.credit.place(x=5, y=1)
+
+        # Title Frame
+        self.title_frame.pack(padx=5, pady=5)
+        self.title_label.pack()
+
+        # Input Frame
+        self.input_frame.pack(padx=5, pady=5)
+        self.input_title.grid(row=0, column=0)
+        self.box.grid(row=1, column=0)
+
+        # Fire the mainloop so the window opens
+        self.root.mainloop()
+
+##  Start  ##
+
+if (__name__ == "__main__"):
+    WindowObject()
