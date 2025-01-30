@@ -15,8 +15,9 @@ from classes import RNA
 from tkinter import Tk
 from tkinter import Label
 from tkinter import LabelFrame
-from tkinter import Text
 from tkinter import Button
+from tkinter import Checkbutton
+from tkinter import Text
 
 from tkinter import DISABLED
 from tkinter import NORMAL
@@ -30,8 +31,8 @@ class WindowObject:
         self.root: Tk = Tk()
         self.credit = Label(self.root, text="Created by Gregory Mejia")
 
-        self.title_frame = LabelFrame(self.root, padx=5, pady=-5)
-        self.title_label = Label(self.title_frame, text="Genetic Coder", font=("Helvetica", 14, "bold"), padx=15)
+        self.title_frame = LabelFrame(self.root, padx=100, pady=-15)
+        self.title_label = Label(self.title_frame, text="Genetic Coder", font=("Helvetica", 20, "bold"), padx=15)
 
         # Create the input side
         self.input_frame = LabelFrame(self.root)
@@ -47,22 +48,27 @@ class WindowObject:
 
         # Create the central input widget thing
         self.middle_frame = LabelFrame(self.root)
-        self.middle_title = Label(self.middle_frame, text="Controls", font=("Helvetica", 15))
-        self.convert = Button(self.middle_frame, text="Convert", padx=20)
+        self.middle_title = Label(self.middle_frame, text="Controls", font=("Helvetica", 25, "bold"))
+
+        self.convert_outline = LabelFrame(self.middle_frame)
+        self.convert = Button(self.convert_outline, text="Convert Strand")
 
         # Now we have the mode switcher
-        self.mode_frame = LabelFrame(self.middle_frame, padx=10, pady=10)
-        self.dna_button = Button(self.mode_frame, text="DNA", padx=20)
-        self.rna_button= Button(self.mode_frame, text="RNA", padx=20)
+        self.mode_switcher_font = ("Helvetica", 12)
+
+        self.mode_frame = LabelFrame(self.middle_frame, padx=5, pady=5)
+        self.dna_button = Button(self.mode_frame, text="DNA", padx=15, font=self.mode_switcher_font)
+        self.mrna_button = Button(self.mode_frame, text="mRNA", padx=10, font=self.mode_switcher_font)
+        self.trna_button = Button(self.mode_frame, text="tRNA", padx=15, font=self.mode_switcher_font)
 
         # Modify their properties
         self.root.title("Genetic Coder")
         self.root.resizable(False, False)
-        self.credit.config(font=("Helvetica", 7))
+        self.credit.config(font=("Times", 7))
         self.credit.place(x=5, y=1)
 
         # Title Frame
-        self.title_frame.pack(padx=5, pady=5)
+        self.title_frame.pack(padx=5, pady=5, side="top", anchor="center")
         self.title_label.pack()
 
         # Input Frame
@@ -82,9 +88,12 @@ class WindowObject:
         self.mode_frame.columnconfigure(1, pad=5)
 
         self.dna_button.grid(row=0, column=0)
-        self.rna_button.grid(row=0, column=1)
+        self.mrna_button.grid(row=0, column=1)
+        self.trna_button.grid(row=0, column=2)
 
-        self.convert.pack()
+        self.convert_outline.pack(padx=5, pady=5, anchor="s", side="bottom")
+        self.convert.config(font=("Times", 20, "bold", "italic"), padx=20)
+        self.convert.pack(padx=5, pady=5)
 
         # Output Frame
         self.output_frame.pack(padx=5, pady=5, side="right", anchor="ne")
