@@ -48,6 +48,7 @@ class WindowObject:
         # Create the central input widget thing
         self.middle_frame = LabelFrame(self.root)
         self.middle_title = Label(self.middle_frame, text="Controls", font=("Helvetica", 15))
+        self.convert = Button(self.middle_frame, text="Convert", padx=20)
 
         # Now we have the mode switcher
         self.mode_frame = LabelFrame(self.middle_frame, padx=10, pady=10)
@@ -71,7 +72,7 @@ class WindowObject:
         self.box.config(width=35, height=15)
 
         # Manage the middle stuff
-        self.middle_frame.pack(padx=3, pady=5, anchor="center", side="top")
+        self.middle_frame.pack(padx=3, pady=5, anchor="center", side="left")
         self.middle_title.pack(anchor="center", side="top")
 
         # Middle stuff - mode switcher
@@ -82,6 +83,8 @@ class WindowObject:
 
         self.dna_button.grid(row=0, column=0)
         self.rna_button.grid(row=0, column=1)
+
+        self.convert.pack()
 
         # Output Frame
         self.output_frame.pack(padx=5, pady=5, side="right", anchor="ne")
