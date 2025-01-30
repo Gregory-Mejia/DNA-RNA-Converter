@@ -17,6 +17,10 @@ from tkinter import Label
 from tkinter import LabelFrame
 from tkinter import Text
 
+from tkinter import DISABLED
+from tkinter import NORMAL
+from tkinter import END
+
 ##  Classes  ##
 
 class WindowObject:
@@ -59,6 +63,9 @@ class WindowObject:
         self.output_frame.pack(padx=5, pady=5, side="right", anchor="ne")
         self.output_title.grid(row=0, column=0)
         self.output.grid(row=1, column=0)
+
+        self.output.insert(END, "lorem ipsum dolor set")
+        self.output.config(state=DISABLED)
 
         # Fire the mainloop so the window opens
         self.root.mainloop()
