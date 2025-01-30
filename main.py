@@ -47,11 +47,17 @@ class WindowObject:
         self.output = Text(self.output_frame)
 
         # Create the central input widget thing
-        self.middle_frame = LabelFrame(self.root)
+        self.middle_frame = LabelFrame(self.root, pady=22)
         self.middle_title = Label(self.middle_frame, text="Controls", font=("Helvetica", 25, "bold"))
 
         self.convert_outline = LabelFrame(self.middle_frame)
         self.convert = Button(self.convert_outline, text="Convert Strand")
+
+        # Mode identifier
+        self.identifier_font = ("Helvetica", 13)
+        self.identifier_frame = LabelFrame(self.middle_frame, padx=30, pady=5)
+        self.identifier_text = Label(self.identifier_frame, text="Current Mode: ", font=self.identifier_font)
+        self.identifier_actual = Label(self.identifier_frame, text="DNA", font=self.identifier_font)
 
         # Now we have the mode switcher
         self.mode_switcher_font = ("Helvetica", 12)
@@ -80,6 +86,11 @@ class WindowObject:
         # Manage the middle stuff
         self.middle_frame.pack(padx=3, pady=5, anchor="center", side="left")
         self.middle_title.pack(anchor="center", side="top")
+
+        # Mode Identifier
+        self.identifier_frame.pack(padx=5, pady=3)
+        self.identifier_text.grid(row=0, column=0)
+        self.identifier_actual.grid(row=0, column=1)
 
         # Middle stuff - mode switcher
         self.mode_frame.pack(padx=5, pady=5)
