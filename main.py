@@ -63,9 +63,9 @@ class WindowObject:
         self.mode_switcher_font = ("Helvetica", 12)
 
         self.mode_frame = LabelFrame(self.middle_frame, padx=5, pady=5)
-        self.dna_button = Button(self.mode_frame, text="DNA", padx=15, font=self.mode_switcher_font)
-        self.mrna_button = Button(self.mode_frame, text="mRNA", padx=10, font=self.mode_switcher_font)
-        self.trna_button = Button(self.mode_frame, text="tRNA", padx=15, font=self.mode_switcher_font)
+        self.dna_button = Button(self.mode_frame, text="DNA", padx=10, font=self.mode_switcher_font)
+        self.mrna_button = Button(self.mode_frame, text="mRNA", padx=5, font=self.mode_switcher_font)
+        self.trna_button = Button(self.mode_frame, text="tRNA", padx=10, font=self.mode_switcher_font)
 
         # Always on-top button
         self.ontop_frame = LabelFrame(self.middle_frame, padx=37, pady=3)
@@ -114,7 +114,7 @@ class WindowObject:
 
         # Convert Button
         self.convert_outline.pack(padx=5, pady=5, anchor="s", side="bottom")
-        self.convert.config(font=("Times", 20, "bold", "italic"), padx=20)
+        self.convert.config(font=("Times", 20, "bold", "italic"), padx=20, command=self.convert_func)
         self.convert.pack(padx=5, pady=5)
 
         # Output Frame
@@ -127,6 +127,18 @@ class WindowObject:
 
         # Fire the mainloop so the window opens
         self.root.mainloop()
+
+    def convert_func(self):
+        if (self.box.get("1.0", "end-1c").replace(" ", "").replace("\n", "") != ""):
+            self.output.config(state=NORMAL)
+            self.output.delete("1.0", END)
+            self.output.insert("1.0", self.box.get("1.0", "end-1c"))
+            self.output.config(state=DISABLED)
+        else:
+            self.output.config(state=NORMAL)
+            self.output.delete("1.0", END)
+            self.output.insert("1.0", "ERROR")
+            self.output.config(state=DISABLED)
 
 ##  Start  ##
 
