@@ -34,6 +34,12 @@ class WindowObject:
 
         self.box = Text(self.input_frame)
 
+        # Create the output side
+        self.output_frame = LabelFrame(self.root)
+        self.output_title = Label(self.output_frame, text="Output", font=("Helvetica", 10))
+
+        self.output = Text(self.output_frame)
+
         # Modify their properties
         self.root.title("Genetic Coder")
         self.root.minsize(500, 300)
@@ -45,9 +51,14 @@ class WindowObject:
         self.title_label.pack()
 
         # Input Frame
-        self.input_frame.pack(padx=5, pady=5)
+        self.input_frame.pack(padx=5, pady=5, side="left", anchor="nw")
         self.input_title.grid(row=0, column=0)
         self.box.grid(row=1, column=0)
+
+        # Output Frame
+        self.output_frame.pack(padx=5, pady=5, side="right", anchor="ne")
+        self.output_title.grid(row=0, column=0)
+        self.output.grid(row=1, column=0)
 
         # Fire the mainloop so the window opens
         self.root.mainloop()
