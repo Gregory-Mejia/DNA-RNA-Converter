@@ -47,7 +47,7 @@ class WindowObject:
         self.output = Text(self.output_frame)
 
         # Create the central input widget thing
-        self.middle_frame = LabelFrame(self.root, pady=22)
+        self.middle_frame = LabelFrame(self.root, pady=4)
         self.middle_title = Label(self.middle_frame, text="Controls", font=("Helvetica", 25, "bold"))
 
         self.convert_outline = LabelFrame(self.middle_frame)
@@ -66,6 +66,11 @@ class WindowObject:
         self.dna_button = Button(self.mode_frame, text="DNA", padx=15, font=self.mode_switcher_font)
         self.mrna_button = Button(self.mode_frame, text="mRNA", padx=10, font=self.mode_switcher_font)
         self.trna_button = Button(self.mode_frame, text="tRNA", padx=15, font=self.mode_switcher_font)
+
+        # Always on-top button
+        self.ontop_frame = LabelFrame(self.middle_frame, padx=37, pady=3)
+        self.ontop_button = Checkbutton(self.ontop_frame)
+        self.ontop_text = Label(self.ontop_frame, text="Always Ontop?", font=self.identifier_font)
 
         # Modify their properties
         self.root.title("Genetic Coder")
@@ -102,6 +107,12 @@ class WindowObject:
         self.mrna_button.grid(row=0, column=1)
         self.trna_button.grid(row=0, column=2)
 
+        # Always on top frame
+        self.ontop_frame.pack()
+        self.ontop_text.grid(row=0, column=0, padx=15)
+        self.ontop_button.grid(row=0, column=1)
+
+        # Convert Button
         self.convert_outline.pack(padx=5, pady=5, anchor="s", side="bottom")
         self.convert.config(font=("Times", 20, "bold", "italic"), padx=20)
         self.convert.pack(padx=5, pady=5)
