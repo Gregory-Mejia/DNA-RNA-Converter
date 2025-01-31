@@ -134,8 +134,6 @@ class WindowObject:
         self.output_frame.pack(padx=5, pady=5, side="right", anchor="ne")
         self.output_title.grid(row=0, column=0)
         self.output.grid(row=1, column=0)
-
-        self.output.insert(END, "lorem ipsum dolor set")
         self.output.config(state=DISABLED, width=35, height=15)
 
         # Fire the mainloop so the window opens
@@ -143,16 +141,32 @@ class WindowObject:
 
     def convert_func(self):
         # TODO: Do some stuff with the DNA and RNA modules finally, do something with mode selector first
-        if (self.box.get("1.0", "end-1c").replace(" ", "").replace("\n", "") != ""):
-            self.output.config(state=NORMAL)
-            self.output.delete("1.0", END)
-            self.output.insert("1.0", self.box.get("1.0", "end-1c"))
-            self.output.config(state=DISABLED)
+        input_text: dict = self.box.get("1.0", "end-1c").replace(" ", "").replace("\n", "")
+        if (input_text != ""):
+            outputs = {"DNA": "", "RNA": ""}
+            if (self.mode == "DNA"):
+                    outputs["DNA"] = DNA(input_text)
+                    outputs["RNA"] = RNA(outputs["DNA"].strand)
+            elif (self.mode == "mRNA"):
+                    outputs["RNA"] = RNA(input_text)
+                    outputs["DNA"] = DNA(outputs["RNA"].complement)
+            elif (self.mode == "tRNA"):
+                    outputs["RNA"] = RNA(input_text)
+                    outputs["DNA"] = DNA(outputs["RNA"].strand)
+            
+            if (outputs["DNA"].error or outputs["RNA"].error):
+                self.put_output(f'ERROR:\n {str(outputs["DNA"].error) + "\n\n" + str(outputs["RNA"].error)}')
+                return
+
+            self.put_output(str(outputs["DNA"]) + str(outputs["RNA"]))
         else:
-            self.output.config(state=NORMAL)
-            self.output.delete("1.0", END)
-            self.output.insert("1.0", "ERROR")
-            self.output.config(state=DISABLED)
+            self.put_output("ERROR: No Input")
+
+    def put_output(self, text: str):
+        self.output.config(state=NORMAL)
+        self.output.delete("1.0", END)
+        self.output.insert("1.0", text)
+        self.output.config(state=DISABLED)
     
     def always_on_top(self):
         self.root.wm_attributes("-topmost", self.ontop.get())
