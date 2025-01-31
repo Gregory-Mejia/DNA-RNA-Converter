@@ -18,6 +18,7 @@ from tkinter import LabelFrame
 from tkinter import Button
 from tkinter import Checkbutton
 from tkinter import Text
+from tkinter import BooleanVar
 
 from tkinter import DISABLED
 from tkinter import NORMAL
@@ -27,12 +28,17 @@ from tkinter import END
 
 class WindowObject:
     def __init__(self):
+
         # Create our objects
         self.root: Tk = Tk()
         self.credit = Label(self.root, text="Created by Gregory Mejia")
 
         self.title_frame = LabelFrame(self.root, padx=100, pady=-15)
         self.title_label = Label(self.title_frame, text="Genetic Coder", font=("Helvetica", 20, "bold"), padx=15)
+
+        # Here are our variables that we'll bind to later
+        self.ontop = BooleanVar()
+        self.mode = "DNA"
 
         # Create the input side
         self.input_frame = LabelFrame(self.root)
@@ -55,21 +61,27 @@ class WindowObject:
 
         # Mode identifier
         self.identifier_font = ("Helvetica", 13)
-        self.identifier_frame = LabelFrame(self.middle_frame, padx=30, pady=5)
+        self.identifier_frame = LabelFrame(self.middle_frame, padx=45, pady=5)
         self.identifier_text = Label(self.identifier_frame, text="Current Mode: ", font=self.identifier_font)
         self.identifier_actual = Label(self.identifier_frame, text="DNA", font=self.identifier_font)
 
         # Now we have the mode switcher
-        self.mode_switcher_font = ("Helvetica", 12)
+        self.mode_font = ("Helvetica", 12)
 
         self.mode_frame = LabelFrame(self.middle_frame, padx=5, pady=5)
-        self.dna_button = Button(self.mode_frame, text="DNA", padx=10, font=self.mode_switcher_font)
-        self.mrna_button = Button(self.mode_frame, text="mRNA", padx=5, font=self.mode_switcher_font)
-        self.trna_button = Button(self.mode_frame, text="tRNA", padx=10, font=self.mode_switcher_font)
+        self.dna_button = Button(
+                self.mode_frame, text="DNA", padx=10, font=self.mode_font, command=lambda: self.mode_switcher("DNA")
+            )
+        self.mrna_button = Button(
+                self.mode_frame, text="mRNA", padx=5, font=self.mode_font, command=lambda: self.mode_switcher("mRNA")
+            )
+        self.trna_button = Button(
+                self.mode_frame, text="tRNA", padx=10, font=self.mode_font, command=lambda: self.mode_switcher("tRNA")
+            )
 
         # Always on-top button
         self.ontop_frame = LabelFrame(self.middle_frame, padx=37, pady=3)
-        self.ontop_button = Checkbutton(self.ontop_frame)
+        self.ontop_button = Checkbutton(self.ontop_frame, command=self.always_on_top, variable=self.ontop)
         self.ontop_text = Label(self.ontop_frame, text="Always Ontop?", font=self.identifier_font)
 
         # Modify their properties
@@ -100,8 +112,9 @@ class WindowObject:
         # Middle stuff - mode switcher
         self.mode_frame.pack(padx=5, pady=5)
         # I don't know if this is overly redudant but just in case formatting is wrong
-        self.mode_frame.columnconfigure(0, pad=5)
+        self.mode_frame.columnconfigure(0, pad=14)
         self.mode_frame.columnconfigure(1, pad=5)
+        self.mode_frame.columnconfigure(2, pad=14)
 
         self.dna_button.grid(row=0, column=0)
         self.mrna_button.grid(row=0, column=1)
@@ -129,6 +142,7 @@ class WindowObject:
         self.root.mainloop()
 
     def convert_func(self):
+        # TODO: Do some stuff with the DNA and RNA modules finally, do something with mode selector first
         if (self.box.get("1.0", "end-1c").replace(" ", "").replace("\n", "") != ""):
             self.output.config(state=NORMAL)
             self.output.delete("1.0", END)
@@ -139,6 +153,23 @@ class WindowObject:
             self.output.delete("1.0", END)
             self.output.insert("1.0", "ERROR")
             self.output.config(state=DISABLED)
+    
+    def always_on_top(self):
+        self.root.wm_attributes("-topmost", self.ontop.get())
+
+    def mode_switcher(self, button_id: str):
+        self.identifier_actual.config(text=button_id)
+        self.mode = button_id
+
+        # Probably will have to do this again for the convert function
+        match button_id:
+            case "DNA":
+                self.identifier_frame.config(padx=45)
+            case "mRNA":
+                self.identifier_frame.config(padx=39)
+            case "tRNA":
+                self.identifier_frame.config(padx=43)
+
 
 ##  Start  ##
 
