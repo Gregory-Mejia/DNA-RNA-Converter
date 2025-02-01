@@ -60,23 +60,23 @@ class WindowObject:
         self.convert = Button(self.convert_outline, text="Convert Strand")
 
         # Mode identifier
-        self.identifier_font = ("Helvetica", 13)
+        identifier_font = ("Helvetica", 13)
         self.identifier_frame = LabelFrame(self.middle_frame, padx=45, pady=5)
-        self.identifier_text = Label(self.identifier_frame, text="Current Mode: ", font=self.identifier_font)
-        self.identifier_actual = Label(self.identifier_frame, text="DNA", font=self.identifier_font)
+        self.identifier_text = Label(self.identifier_frame, text="Current Mode: ", font=identifier_font)
+        self.identifier_actual = Label(self.identifier_frame, text="DNA", font=identifier_font)
 
         # Now we have the mode switcher
-        self.mode_font = ("Helvetica", 12)
+        mode_font = ("Helvetica", 12)
 
         self.mode_frame = LabelFrame(self.middle_frame, padx=5, pady=5)
         self.dna_button = Button(
-                self.mode_frame, text="DNA", padx=10, font=self.mode_font, command=lambda: self.mode_switcher("DNA")
+                self.mode_frame, text="DNA", padx=10, font=mode_font, command=lambda: self.mode_switcher("DNA")
             )
         self.mrna_button = Button(
-                self.mode_frame, text="mRNA", padx=5, font=self.mode_font, command=lambda: self.mode_switcher("mRNA")
+                self.mode_frame, text="mRNA", padx=5, font=mode_font, command=lambda: self.mode_switcher("mRNA")
             )
         self.trna_button = Button(
-                self.mode_frame, text="tRNA", padx=10, font=self.mode_font, command=lambda: self.mode_switcher("tRNA")
+                self.mode_frame, text="tRNA", padx=10, font=mode_font, command=lambda: self.mode_switcher("tRNA")
             )
 
         # Always on-top button
@@ -141,41 +141,60 @@ class WindowObject:
 
     def convert_func(self):
         # TODO: Do some stuff with the DNA and RNA modules finally, do something with mode selector first
+        # Replace the input text whitespace
         input_text: dict = self.box.get("1.0", "end-1c").replace(" ", "").replace("\n", "")
         if (input_text != ""):
-            outputs = {"DNA": "", "RNA": ""}
+            # Store DNA and RNA outside of the if statement so that we don't have two long, repeated code segments
+            outputs = {"DNA": "", "RNA": "", "Amino Acids": []}
             if (self.mode == "DNA"):
-                    outputs["DNA"] = DNA(input_text)
-                    outputs["RNA"] = RNA(outputs["DNA"].strand)
-            elif (self.mode == "mRNA"):
-                    outputs["RNA"] = RNA(input_text)
-                    outputs["DNA"] = DNA(outputs["RNA"].complement)
-            elif (self.mode == "tRNA"):
-                    outputs["RNA"] = RNA(input_text)
-                    outputs["DNA"] = DNA(outputs["RNA"].strand)
+                outputs["DNA"] = DNA(input_text)
+                outputs["RNA"] = RNA(outputs["DNA"].strand)
+            else:
+                # Made this a ternary to avoid repeats for mRNA and tRNA
+                outputs["RNA"] = RNA(input_text, is_rna=True, mRNA=True if (self.mode == "mRNA") else False)
+                outputs["DNA"] = DNA(outputs["RNA"].strand, True)
             
             if (outputs["DNA"].error or outputs["RNA"].error):
                 self.put_output(f'ERROR:\n {str(outputs["DNA"].error) + "\n\n" + str(outputs["RNA"].error)}')
                 return
+            
+            # Oh my lord that is a crazy format string with multiline that also is hard to read
+            outputs["Amino Acids"] = outputs["RNA"].match_codons_to_amino_acids(outputs["RNA"].mRNA)
+            self.put_output(f'''Class DNA:
+    Strand:     {outputs["DNA"].strand}
+    Complement: {outputs["DNA"].complement}
 
-            self.put_output(str(outputs["DNA"]) + str(outputs["RNA"]))
+Class RNA:
+    mRNA: {outputs["RNA"].mRNA}
+    tRNA: {outputs["RNA"].tRNA}
+
+Amino Acids:
+{outputs["RNA"].list_to_string(outputs["Amino Acids"])}
+
+Full Amino Acid Names:
+{outputs["RNA"].list_to_string(outputs["RNA"].match_amino_acid_full(outputs["Amino Acids"]))}''')
         else:
+            # We push to the output an error.
             self.put_output("ERROR: No Input")
 
     def put_output(self, text: str):
+        # This is a function that clears the output and replaces it with something else: 'text'
         self.output.config(state=NORMAL)
         self.output.delete("1.0", END)
         self.output.insert("1.0", text)
         self.output.config(state=DISABLED)
     
     def always_on_top(self):
+        # This is like the most self explainatory thing ever; sets the gui to always be on top
         self.root.wm_attributes("-topmost", self.ontop.get())
 
     def mode_switcher(self, button_id: str):
+        # Switch modes
         self.identifier_actual.config(text=button_id)
         self.mode = button_id
 
-        # Probably will have to do this again for the convert function
+        # This is to change the padding so that it doesn't look weird when we change modes
+        # Not sure if there is an easier way than this
         match button_id:
             case "DNA":
                 self.identifier_frame.config(padx=45)
@@ -188,4 +207,5 @@ class WindowObject:
 ##  Start  ##
 
 if (__name__ == "__main__"):
+    # Create our new GUI class when this is the focal execution script
     WindowObject()
