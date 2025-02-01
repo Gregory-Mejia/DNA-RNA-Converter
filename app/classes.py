@@ -5,6 +5,7 @@
 
     Purpose: Resources
     This is mainly for the code to be more organized. This will be called by the 'main.py' file.
+    This is also a modified version of the original class file to support RNA to DNA conversion
     
 '''
 
@@ -58,24 +59,33 @@ class pair_struct:
 
         return final
     
+    def list_to_string(self, convert: list) -> str:
+        # This basically is just for debugging purposes since my interpreter was acting funny
+        return str(convert).replace(",", "").replace("'", "").replace("[", "").replace("]", "")
+    
 # DNA and RNA are defined as separate classes to make them easier to use in the main file.
 
 class DNA(pair_struct):
-    def __init__(self, strand: str):
-        self.rules: dict = {"A": "T", "T": "A", "G": "C", "C": "G"}
+    def __init__(self, strand: str, to=False):
+        self.rules: dict = {"A": "T", "T": "A", "G": "C", "C": "G", "U": "A"}
         self.error: list = []
-        self.strand: str = list_to_string(split_string_into_ns(strand, 3))
+        self.storage: str = self.list_to_string(split_string_into_ns(strand, 3))
+        self.strand: str = self.convert(self.storage) if (to) else self.storage
         self.complement: str = self.convert(self.strand)
 
 # Use the template DNA strand to get both the mRNA and tRNA
 class RNA(pair_struct):
-    def __init__(self, template_strand: str):
+    def __init__(self, dna_strand: str, is_rna=False, mRNA=True):
         self.rules: dict = {"A": "U", "T": "A", "G": "C", "C": "G", "U": "A"}
         self.error: list = []
-        self.template: str = list_to_string(split_string_into_ns(template_strand, 3))
+        self.template: str = self.list_to_string(split_string_into_ns(dna_strand, 3))
 
         self.mRNA: str = self.convert(self.template)
         self.tRNA: str = self.convert(self.mRNA)
+
+        if (is_rna):
+            self.mRNA = self.template if (mRNA) else self.convert(self.template)
+            self.tRNA = self.convert(self.template) if (mRNA) else self.template
 
         # Legacy components for the string function
         self.strand = self.mRNA
@@ -211,7 +221,3 @@ def split_string_into_ns(string: str, n: int) -> list:
 
     # Used list comprehension over a regular for loop to take up less space and have less boilerplate code
     return [string[index: index + n] for index in range(0, len(string), n)]
-
-def list_to_string(convert: list) -> str:
-    # This basically is just for debugging purposes since my interpreter was acting funny
-    return str(convert).upper().replace(",", "").replace("'", "").replace("[", "").replace("]", "")
