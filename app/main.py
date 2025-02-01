@@ -82,7 +82,7 @@ class WindowObject:
         # Always on-top button
         self.ontop_frame = LabelFrame(self.middle_frame, padx=37, pady=3)
         self.ontop_button = Checkbutton(self.ontop_frame, command=self.always_on_top, variable=self.ontop)
-        self.ontop_text = Label(self.ontop_frame, text="Always Ontop?", font=self.identifier_font)
+        self.ontop_text = Label(self.ontop_frame, text="Always Ontop?", font=identifier_font)
 
         # Modify their properties
         self.root.title("Genetic Coder")
