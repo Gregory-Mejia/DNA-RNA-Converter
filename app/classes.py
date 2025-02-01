@@ -5,6 +5,7 @@
 
     Purpose: Resources
     This is mainly for the code to be more organized. This will be called by the 'main.py' file.
+    This is a modified version of the original 'classes.py' file to support RNA to DNA
     
 '''
 
