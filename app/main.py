@@ -136,6 +136,8 @@ class WindowObject:
         self.output.grid(row=1, column=0)
         self.output.config(state=DISABLED, width=35, height=15)
 
+        # Lazy load the icon so that it doesn't lag the application
+        self.root.after(5, lambda: self.root.iconbitmap("icon.ico"))
         # Fire the mainloop so the window opens
         self.root.mainloop()
 
