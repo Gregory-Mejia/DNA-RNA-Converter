@@ -5,7 +5,6 @@
 
     Purpose: Resources
     This is mainly for the code to be more organized. This will be called by the 'main.py' file.
-    This is also a modified version of the original class file to support RNA to DNA conversion
     
 '''
 
@@ -69,8 +68,9 @@ class DNA(pair_struct):
     def __init__(self, strand: str, to=False):
         self.rules: dict = {"A": "T", "T": "A", "G": "C", "C": "G", "U": "A"}
         self.error: list = []
-        self.storage: str = self.list_to_string(split_string_into_ns(strand, 3))
-        self.strand: str = self.convert(self.storage) if (to) else self.storage
+
+        storage: str = self.list_to_string(split_string_into_ns(strand, 3))
+        self.strand: str = self.convert(storage) if (to) else storage
         self.complement: str = self.convert(self.strand)
 
 # Use the template DNA strand to get both the mRNA and tRNA
@@ -78,14 +78,15 @@ class RNA(pair_struct):
     def __init__(self, dna_strand: str, is_rna=False, mRNA=True):
         self.rules: dict = {"A": "U", "T": "A", "G": "C", "C": "G", "U": "A"}
         self.error: list = []
-        self.template: str = self.list_to_string(split_string_into_ns(dna_strand, 3))
+        template: str = self.list_to_string(split_string_into_ns(dna_strand, 3))
 
-        self.mRNA: str = self.convert(self.template)
+        self.mRNA: str = self.convert(template)
         self.tRNA: str = self.convert(self.mRNA)
 
+        # Did this to avoid one long ternary
         if (is_rna):
-            self.mRNA = self.template if (mRNA) else self.convert(self.template)
-            self.tRNA = self.convert(self.template) if (mRNA) else self.template
+            self.mRNA = template if (mRNA) else self.convert(template)
+            self.tRNA = self.convert(template) if (mRNA) else template
 
         # Legacy components for the string function
         self.strand = self.mRNA
