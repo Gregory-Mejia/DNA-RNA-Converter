@@ -10,6 +10,6 @@ This project was originally written in the Lua/Luau programming language, but wa
 Additionally, keep in mind that this is one of my first experiences with actually using Python for more serious applications such as this one, so don't expect perfection or perfectly adhered industry standard formatting. There may be the occasional formatting error, nonsensical variable name thrown here and there, or simply poorly written code due to this. Also, I had no idea if I should have made the amino acid conversion tables into a JSON file. This caused me to leave them in *classes.py* in the *RNA class*.
 
 ## About Downloading
-There was originally going to be a download for an exe file; however, Python's *pyinstaller* library makes incredibly bloated exe files. Yes, there are ways to reduce its bloat, but I simply wish to not get into those methods like virtual machines just for this simple project.
+There was originally going to be a download for an exe file; however, Python's *pyinstaller* library makes incredibly bloated exe files. Yes, there are ways to reduce its bloat, but I simply wish to not get into those methods-like virtual machines-just for this simple project.
 
 If you wish to use this application, have the Python interpreter isntalled and go to the **'app'** folder. There you'll need to download everything but that other folder in that folder. Remember to keep all of these in the same folder and to just run *main.py* as everything else is just a resource for that file to access.
