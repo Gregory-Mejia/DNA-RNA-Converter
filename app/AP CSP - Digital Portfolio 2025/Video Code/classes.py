@@ -43,6 +43,9 @@ class DNA(pair_struct):
         self.strand: str = self.convert(storage) if (to) else storage
         self.complement: str = self.convert(self.strand)
 
+        if ("U" in self.strand):
+            self.error.append("!! U was found in DNA strand !!")
+
 class RNA(pair_struct):
     def __init__(self, dna_strand: str, is_rna=False, mRNA=True):
         self.rules: dict = {"A": "U", "T": "A", "G": "C", "C": "G", "U": "A"}
@@ -55,6 +58,9 @@ class RNA(pair_struct):
         if (is_rna):
             self.mRNA = template if (mRNA) else self.convert(template)
             self.tRNA = self.convert(template) if (mRNA) else template
+
+            if ("T" in self.tRNA or "T" in self.mRNA):
+                self.error.append(f'!! T was found in {("T" in self.tRNA) and "tRNA" or "mRNA"} !!')
 
         self.strand = self.mRNA
         self.complement = self.tRNA
